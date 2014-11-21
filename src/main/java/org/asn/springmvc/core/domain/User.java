@@ -11,43 +11,53 @@ package org.asn.springmvc.core.domain;
 public class User {
 
 	private Long id;
-	private String username;
-	private String password;
+	private String j_username;
+	private String j_password;
 	
 	public User(){}
 	
-	public User(Long id, String username, String password) {
+	public User(Long id, String j_username, String j_password) {
 		super();
 		this.id = id;
-		this.username = username;
-		this.password = password;
+		this.j_username = j_username;
+		this.j_password = j_password;
 	}
 
 	public Long getId() {
 		return id;
 	}
 
-
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-
-	public String getUsername() {
-		return username;
+	public String getJ_username() {
+		return j_username;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setJ_username(String j_username) {
+		this.j_username = j_username;
 	}
 
-	public String getPassword() {
-		return password;
+	public String getJ_password() {
+		return j_password;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setJ_password(String j_password) {
+		this.j_password = j_password;
 	}
 
-	
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("User [id=");
+		builder.append(id);
+		builder.append(", j_username=");
+		builder.append(j_username);
+		builder.append(", j_password=");
+		builder.append(j_password);
+		builder.append("]");
+		return builder.toString();
+	}
+		
 }

@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.apache.commons.io.input.TeeInputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Abhishek
@@ -18,13 +20,15 @@ import org.apache.commons.io.input.TeeInputStream;
  */
 public class MyRequestWrapper extends HttpServletRequestWrapper{
 
+	private final Logger LOG = LoggerFactory.getLogger(getClass());
+	
 	private final ByteArrayOutputStream bos = new ByteArrayOutputStream();
     private long id;
 
-
-    public MyRequestWrapper(Long requestId, HttpServletRequest request) {
-        super(request);
+    public MyRequestWrapper(Long requestId, HttpServletRequest request) {    	
+        super(request);        
         this.id = requestId;
+        LOG.info("MyRequestWrapper instance created with requestId[{}]", requestId);
     }
 
     @Override

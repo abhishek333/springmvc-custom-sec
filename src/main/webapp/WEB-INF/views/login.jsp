@@ -7,11 +7,11 @@
 <h2>Hello, please log in:</h2>
 <br><br>
 <body>
-	<f:form method="post" action="${pageContext.request.contextPath}/auth/j_security_check" modelAttribute="LOGIN_MODEL">
+	<f:form method="post" action="${pageContext.request.contextPath}/auth/login" modelAttribute="LOGIN_MODEL">
 	    <p><strong>Please Enter Your User Name: </strong>
-	    <input type="text" name="j_username" size="25"/>
+	    <f:input path="j_username" size="25"/>
 	    <p><p><strong>Please Enter Your Password: </strong>
-	    <input type="password" size="15" name="j_password"/>
+	    <f:password size="15" path="j_password"/>
 	    <p><p>
 	    <input type="submit" value="Submit">
 	    <input type="reset" value="Reset">

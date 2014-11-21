@@ -9,17 +9,21 @@ import java.io.PrintWriter;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletResponse;
-import javax.servlet.ServletResponseWrapper;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponseWrapper;
 
 import org.apache.commons.io.output.TeeOutputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Abhishek
  *
  */
-public class MyResponseWrapper extends ServletResponseWrapper {
+public class MyResponseWrapper extends HttpServletResponseWrapper {
 
+	private final Logger LOG = LoggerFactory.getLogger(getClass());
+	
 	private final ByteArrayOutputStream bos = new ByteArrayOutputStream();
     private PrintWriter writer = new PrintWriter(bos);
     private long id;
@@ -27,6 +31,7 @@ public class MyResponseWrapper extends ServletResponseWrapper {
     public MyResponseWrapper(Long requestId, HttpServletResponse response) {
         super(response);
         this.id = requestId;
+        LOG.info("MyResponseWrapper instance created with requestId[{}]", requestId);
     }
 
     @Override
@@ -42,6 +47,7 @@ public class MyResponseWrapper extends ServletResponseWrapper {
             @Override
             public void write(int b) throws IOException {
                 tee.write(b);
+                LOG.debug("data writing: {}",b);
             }
         };
     }

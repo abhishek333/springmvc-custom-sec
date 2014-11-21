@@ -31,7 +31,7 @@ public class PrediacteImpl implements Predicate<User> {
 	public User selectByUsername(Collection<User> source, String username) {
 		User user = null;
 		for(User u : source){
-			if(u.getUsername().equals(username)){
+			if(u.getJ_username().equals(username)){
 				user = u;
 				break;
 			}				
