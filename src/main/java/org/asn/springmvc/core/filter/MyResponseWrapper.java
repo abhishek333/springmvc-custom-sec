@@ -54,7 +54,7 @@ public class MyResponseWrapper extends HttpServletResponseWrapper {
 
     @Override
     public PrintWriter getWriter() throws IOException {
-        return new TeePrintWriter(super.getWriter(), writer);
+        return new MyPrintWriter(super.getWriter(), writer);
     }
 
     public byte[] toByteArray(){

@@ -56,7 +56,7 @@
 				</form:form>
 				<h2>Members</h2>
 				<c:choose>
-					<c:when test="${members.size()==0}">
+					<c:when test="${empty members}">
 						<em>No registered members.</em>
 					</c:when>
 					<c:otherwise>
