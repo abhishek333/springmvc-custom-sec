@@ -8,6 +8,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import org.asn.springmvc.core.domain.Member;
+import org.asn.springmvc.core.exception.InvalidMemberException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,8 +55,11 @@ public class MemberDaoImpl implements MemberDao
         return em.createQuery(criteria).getResultList();
     }
 
-    public void register(Member member)
+    public void register(Member member)throws InvalidMemberException
     {
+    	if(member.getId()==null)
+    		throw new InvalidMemberException("100");
+    	
         em.persist(member);
         return;
     }

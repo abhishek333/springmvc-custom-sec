@@ -22,13 +22,11 @@ public class MyRequestWrapper extends HttpServletRequestWrapper{
 
 	private final Logger LOG = LoggerFactory.getLogger(getClass());
 	
-	private final ByteArrayOutputStream bos = new ByteArrayOutputStream();
-    private long id;
+	private final ByteArrayOutputStream bos = new ByteArrayOutputStream();    
 
-    public MyRequestWrapper(Long requestId, HttpServletRequest request) {    	
-        super(request);        
-        this.id = requestId;
-        LOG.info("MyRequestWrapper instance created with requestId[{}]", requestId);
+    public MyRequestWrapper(HttpServletRequest request) {    	
+        super(request);                
+        LOG.info("MyRequestWrapper instance created");
     }
 
     @Override
@@ -45,13 +43,5 @@ public class MyRequestWrapper extends HttpServletRequestWrapper{
 
     public byte[] toByteArray(){
         return bos.toByteArray();
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 }

@@ -4,7 +4,6 @@
 package org.asn.springmvc.core.filter;
 
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicLong;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -26,8 +25,7 @@ import org.springframework.stereotype.Component;
 @Component("secFilter")
 public class SecFilter implements Filter {
 
-	private final Logger LOG = LoggerFactory.getLogger(getClass());
-	private AtomicLong id = new AtomicLong(1);
+	private final Logger LOG = LoggerFactory.getLogger(getClass());	
 
 	/* (non-Javadoc)
 	 * @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
@@ -45,13 +43,29 @@ public class SecFilter implements Filter {
 			FilterChain chain) throws IOException, ServletException {
 		// TODO Auto-generated method stub
 		LOG.info("doFilter filter");
-		long requestId = id.incrementAndGet();
+		HttpServletRequest httpServletRequest = (HttpServletRequest)request;
+				
 		 // wrap around the original request and response
-        MyRequestWrapper reqWrap = new MyRequestWrapper(requestId, (HttpServletRequest)request);
-        MyResponseWrapper resWrap = new MyResponseWrapper(requestId, (HttpServletResponse)response);
+        MyRequestWrapper reqWrap = new MyRequestWrapper(httpServletRequest);
+        MyResponseWrapper resWrap = new MyResponseWrapper((HttpServletResponse)response);
         
         // pass the wrappers on to the next entry
 		chain.doFilter(reqWrap, resWrap);
+		
+		String url = httpServletRequest.getRequestURL().toString();
+		String responseData = "";
+		if(url.contains("/mob")){
+			LOG.info("mob channel");
+			//get response data from resWrap
+			responseData = resWrap.getMobileEncryptedResponseContent();
+		}else{
+			LOG.info("web channel");
+			responseData = resWrap.getWebEncryptedResponseContent();
+		}
+		
+		//write response data to original response
+		response.getOutputStream().write(responseData.getBytes());
+		
 	}
 
 	/* (non-Javadoc)
