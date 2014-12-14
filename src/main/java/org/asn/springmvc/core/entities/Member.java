@@ -1,4 +1,4 @@
-package org.asn.springmvc.core.domain;
+package org.asn.springmvc.core.entities;
 
 import java.io.Serializable;
 

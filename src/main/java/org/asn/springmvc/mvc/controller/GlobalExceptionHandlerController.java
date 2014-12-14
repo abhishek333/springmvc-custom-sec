@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.asn.springmvc.mvc;
+package org.asn.springmvc.mvc.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,7 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
  *
  */
 @ControllerAdvice
-public class GlobalControllerExceptionHandler {
+public class GlobalExceptionHandlerController {
 
 	private final Logger LOG = LoggerFactory.getLogger(getClass());
 	
@@ -29,6 +29,16 @@ public class GlobalControllerExceptionHandler {
         ModelAndView mav = new ModelAndView();
         mav.addObject("exception", e);
         mav.addObject("url", req.getRequestURL());
+        mav.setViewName(DEFAULT_ERROR_VIEW);
+        return mav;
+    }
+	
+	@ExceptionHandler(value = IllegalArgumentException.class)
+    public ModelAndView invalidArgumentErrorHandler(HttpServletRequest req, Exception e) throws Exception {
+		LOG.error("Invalid argument: {}", e.getMessage(), e);
+        // setup and send the user to a default error-view.
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("exception", e.getMessage());
         mav.setViewName(DEFAULT_ERROR_VIEW);
         return mav;
     }

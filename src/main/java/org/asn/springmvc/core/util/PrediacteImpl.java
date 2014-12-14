@@ -5,7 +5,7 @@ package org.asn.springmvc.core.util;
 
 import java.util.Collection;
 
-import org.asn.springmvc.core.domain.User;
+import org.asn.springmvc.core.entities.User;
 import org.springframework.stereotype.Service;
 
 /**

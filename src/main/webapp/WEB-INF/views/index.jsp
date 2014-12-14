@@ -15,7 +15,7 @@
 				<img src="<c:url value="/static/resources/gfx/dualbrand_logo.png"/>"/>
 			</div>
 			<div id="content">
-				<h1>Welcome to JBoss!</h1>
+				<h1>Welcome to Spring!</h1>
 
 				<div>
 					<p>You have successfully deployed a Spring MVC web application.</p>
