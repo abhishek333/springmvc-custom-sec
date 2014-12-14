@@ -3,6 +3,7 @@
  */
 package org.asn.springmvc.mvc.controller;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.asn.springmvc.core.entities.User;
@@ -34,8 +35,8 @@ public class UserController {
 	
 	@RequestMapping(value="/get/users",method=RequestMethod.POST)
 	
-	public ModelAndView getUsers(Model model){
-		LOG.debug("POST came to /user/get/users");
+	public ModelAndView getUsers(Model model, Principal principal){
+		LOG.debug("{} accessing to /user/get/users", principal.getName());
 		List<User> users = userService.findAll();
 		LOG.debug("users: {}", users);
 		model.addAttribute(users);
