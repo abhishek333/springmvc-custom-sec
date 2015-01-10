@@ -7,6 +7,8 @@ import java.security.Principal;
 import java.util.List;
 
 import org.asn.springmvc.core.entities.User;
+import org.asn.springmvc.mvc.model.RestResponse;
+import org.asn.springmvc.mvc.model.RestResponse.REQ;
 import org.asn.springmvc.mvc.service.api.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,13 +35,24 @@ public class UserController {
 		return "user";
 	}
 	
-	@RequestMapping(value="/get/users",method=RequestMethod.POST)
-	
+	@RequestMapping(value="/get/users",method=RequestMethod.POST)	
 	public ModelAndView getUsers(Model model, Principal principal){
 		LOG.debug("{} accessing to /user/get/users", principal.getName());
 		List<User> users = userService.findAll();
 		LOG.debug("users: {}", users);
 		model.addAttribute(users);
+		return new ModelAndView();
+	}
+
+	@RequestMapping(value="/get/users-rest",method=RequestMethod.POST)	
+	public ModelAndView getUsersJson(Model model, Principal principal){
+		LOG.debug("{} accessing to /user/get/users-rest", principal.getName());
+		List<User> users = userService.findAll();
+		LOG.debug("users: {}", users);
+		RestResponse response = new RestResponse();
+		response.setSuccess(REQ.SUCCESS);
+		response.setResponseContent(users);
+		model.addAttribute(response);
 		return new ModelAndView();
 	}
 }
