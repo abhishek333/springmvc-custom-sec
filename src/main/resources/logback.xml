@@ -46,7 +46,7 @@
 		<appender-ref ref="minuteRollingFileAppender"/>
 		<appender-ref ref="consoleAppender" />
 	</logger>
-	<logger name="org.springframework" level="OFF"/>
+	<logger name="org.springframework" level="TRACE"/>
 	<root level="INFO">		
 		<appender-ref ref="consoleAppender" />
 	</root>

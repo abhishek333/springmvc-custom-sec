@@ -3,6 +3,8 @@
  */
 package org.asn.springmvc.core.entities;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
@@ -17,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  *
  */
 @Entity
-public class User extends BaseEntity implements UserPreference{
+public class User extends BaseEntity implements UserPreference, Serializable{
 	
 	@Column(unique=true)
 	private String j_username;
@@ -154,6 +156,13 @@ public class User extends BaseEntity implements UserPreference{
 	@Override
 	public String getName() {
 		return this.j_username;
+	}
+
+	@Transient
+	@JsonIgnore
+	@Override
+	public Long getUserId() {
+		return this.getId();
 	}
 }
 

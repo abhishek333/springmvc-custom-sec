@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.apache.commons.io.IOUtils;
+import org.asn.springmvc.api.UserPreference;
 import org.asn.springmvc.core.entities.User.USER_ROLE;
 
 /**
@@ -26,11 +27,11 @@ import org.asn.springmvc.core.entities.User.USER_ROLE;
 public final class MyRequestWrapper extends HttpServletRequestWrapper {
 
 	private ByteArrayOutputStream cachedBytes;
-	private String user;
+	private UserPreference user;
 	private USER_ROLE userRole;
 	private HttpServletRequest realRequest;
 
-	public MyRequestWrapper(String user, USER_ROLE userRole,
+	public MyRequestWrapper(UserPreference user, USER_ROLE userRole,
 			HttpServletRequest request) {
 		super(request);
 		this.realRequest = request;
@@ -89,12 +90,6 @@ public final class MyRequestWrapper extends HttpServletRequestWrapper {
 			return realRequest.getUserPrincipal();
 		}
 
-		// make an anonymous implementation to just return our user
-		return new Principal() {
-			@Override
-			public String getName() {
-				return user;
-			}
-		};
+		return this.user;
 	}
 }

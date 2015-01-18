@@ -59,29 +59,29 @@ public class SecFilter implements Filter {
 		HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 
 		HttpSession httpSession = httpServletRequest.getSession(false);
-		UserPreference userPreference = null;
-		String user = null;
+		UserPreference userPreference = null;		
 		USER_ROLE userRole = null;
 
 		if (httpSession != null) {
 			// LOG.info("is session new: {}", httpSession.isNew());
 			userPreference = (UserPreference) httpSession.getAttribute("AUTHENTICATED_USER");
-			if (userPreference != null) {
-				user = userPreference.getName();
+			if (userPreference != null) {				
 				userRole = userPreference.getAssignedRole();
 			}
 		}
 
 		// wrap around the original request and response
-		MyRequestWrapper reqWrap = new MyRequestWrapper(user, userRole,	httpServletRequest);
+		MyRequestWrapper reqWrap = new MyRequestWrapper(userPreference, userRole,	httpServletRequest);
 		MyResponseWrapper resWrap = new MyResponseWrapper(httpServletResponse);
-
-		boolean isAllowedToAccess = checkUserCanAccess(userPreference, resWrap);
-
-		if (!isAllowedToAccess) {
-			httpServletResponse.getOutputStream().write(
-					resWrap.getMobileEncryptedResponseContent().getBytes());
-			return;
+		String url = httpServletRequest.getRequestURL().toString();
+		boolean isAllowedToAccess = false;
+		if(url.contains("/user")){
+			isAllowedToAccess = checkUserCanAccess(userPreference, resWrap);
+			if (!isAllowedToAccess) {
+				httpServletResponse.getOutputStream().write(
+						resWrap.getMobileEncryptedResponseContent().getBytes());
+				return;
+			}
 		}
 
 		// pass the wrappers on to the next entry

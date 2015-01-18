@@ -12,6 +12,7 @@ import org.asn.springmvc.core.entities.User.USER_ROLE;
  *
  */
 public interface UserPreference extends Principal{
-		
+	
+	Long getUserId();
 	USER_ROLE getAssignedRole();
 }

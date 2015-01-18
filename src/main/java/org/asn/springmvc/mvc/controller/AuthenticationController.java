@@ -3,8 +3,11 @@
  */
 package org.asn.springmvc.mvc.controller;
 
+import java.security.Principal;
+
 import javax.servlet.http.HttpSession;
 
+import org.asn.springmvc.api.UserPreference;
 import org.asn.springmvc.core.entities.User;
 import org.asn.springmvc.mvc.model.LoginModel;
 import org.asn.springmvc.mvc.model.RestResponse;
@@ -31,7 +34,8 @@ public class AuthenticationController {
 
 	private final Logger LOG = LoggerFactory.getLogger(getClass());
 	@Autowired private UserService userService;
-
+	@Autowired private AuditBuilder auditBuilder;
+	
 	@RequestMapping(value = "/register", method = RequestMethod.GET)	
 	public ModelAndView registerView(Model model) {
 		LOG.info("GET came to /auth/register");		
@@ -72,12 +76,26 @@ public class AuthenticationController {
 		
 		model.addAttribute(response);
 		userService.userLoggedIn(loginModel, session);
+		UserPreference userPreference = (UserPreference) session.getAttribute("AUTHENTICATED_USER");
+		
+		auditBuilder.audit(session.getId(), session.getCreationTime(), userPreference.getUserId())
+		.newOprn("/login")
+		.in("username", userPreference.getName())
+		.out("result", response.getSuccess().toString())
+		.save();
 		return new ModelAndView();
 	}
 	
-	@RequestMapping(value="/logout", method=RequestMethod.GET)
-	public ModelAndView logout(Model model, HttpSession session){
-		LOG.info("GET logout");
+	@RequestMapping(value="/logout", method={RequestMethod.GET, RequestMethod.POST})
+	public ModelAndView logout(Model model, Principal principal, HttpSession session){
+		LOG.info("GET logout");		
+		UserPreference userPreference = (UserPreference) principal;		
+		auditBuilder.audit(session.getId(), session.getCreationTime(), userPreference.getUserId())
+		.newOprn("/logout")
+		.in("user", userPreference.getName())
+		.out("result", "successfuly loggedout")
+		.sessionDestroyed()
+		.save();
 		userService.userLoggedOut(session);
 		return new ModelAndView();
 	}	

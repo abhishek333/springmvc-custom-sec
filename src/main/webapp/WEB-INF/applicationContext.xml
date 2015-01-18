@@ -6,7 +6,9 @@
 	xmlns:repository="http://www.springframework.org/schema/data/repository"
 	xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
-	xsi:schemaLocation="http://www.springframework.org/schema/data/repository http://www.springframework.org/schema/data/repository/spring-repository-1.7.xsd
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+		http://www.springframework.org/schema/data/repository http://www.springframework.org/schema/data/repository/spring-repository-1.7.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.3.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
@@ -25,7 +27,16 @@
     	 </list>
     	</property>
     </bean>
-    
+    <bean id="customizableTraceInterceptor" class="org.springframework.aop.interceptor.CustomizableTraceInterceptor">
+	  <property name="enterMessage" value="Entering $[methodName]($[arguments])"/>
+	  <property name="exitMessage" value="Leaving $[methodName](): $[returnValue]"/>
+	  <property name="useDynamicLogger" value="true"/>
+	</bean>
+	
+	<aop:config>
+	  <aop:advisor advice-ref="customizableTraceInterceptor"
+	    pointcut="execution(public * org.springframework.data.jpa.repository.JpaRepository+.*(..))"/>
+	</aop:config>
     <jpa:repositories base-package="org.asn.springmvc.core.repo"/>
     
     <bean id="dataSource" class = "com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
@@ -52,6 +63,7 @@
  				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
  				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
  				<prop key="hibernate.show_sql">false</prop>
+ 				<prop key="hibernate.format_sql">false</prop>
  			</props>
  		</property>
  	</bean>
